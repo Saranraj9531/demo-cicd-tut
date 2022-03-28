@@ -51,7 +51,7 @@ jobs:
           php-version: 7.2
           extension-csv: mbstring, bcmath
       - name: Composer install
-        run: composer install
+        run:  composer install
       
       - name: Setup Deployer
         uses: atymic/deployer-php-action@master
