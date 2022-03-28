@@ -53,12 +53,12 @@ task('deploy', [
     'deploy:secrets', // Deploy secrets
     'deploy:shared',
     'deploy:vendors',
-    // 'deploy:writable',
+    'deploy:writable',
     'artisan:storage:link', // |
     'artisan:view:clear',   // |
     'artisan:config:cache', // | Laravel specific steps
     'artisan:queue:restart', // | 
-    'artisan:optimize',     // |
+    'artisan:optimize:clear',     // |
     'artisan:migrate',      // |
     'deploy:symlink',
     'deploy:unlock',
