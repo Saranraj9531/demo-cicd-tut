@@ -6,7 +6,7 @@ namespace Deployer;
 require 'recipe/laravel.php';
 require 'recipe/rsync.php';
 
-set('application', 'My App');
+set('application', 'dep-demo');
 set('ssh_multiplexing', true); // Speeds up deployments
 
 set('rsync_src', function () {
@@ -27,7 +27,6 @@ add('rsync', [
     ],
 ]);
 
-
 // Set up a deployer task to copy secrets to the server.
 // Since our secrets are stored in Gitlab, we can access them as env vars.
 task('deploy:secrets', function () {
@@ -35,24 +34,16 @@ task('deploy:secrets', function () {
     upload('.env', get('deploy_path') . '/shared');
 });
 
-// Production Server
-host('myapp.io') // Name of the server
-->hostname('104.248.172.220') // Hostname or IP address
+// Hosts
+host('devthugs.com') // Name of the server
+->hostname('35.174.155.2') // Hostname or IP address
 ->stage('production') // Deployment stage (production, staging, etc)
-->user('root') // SSH user
-->set('deploy_path', '/var/www/my-app'); // Deploy path
-
-// Staging Server
-host('staging.myapp.io') // Name of the server
-->hostname('104.248.172.220') // Hostname or IP address
-->stage('staging') // Deployment stage (production, staging, etc)
-->user('root') // SSH user
-->set('deploy_path', '/var/www/my-app-staging'); // Deploy path
+->user('ubuntu') // SSH user
+->set('deploy_path', '/var/www/html/php'); // Deploy path
 
 after('deploy:failed', 'deploy:unlock'); // Unlock after failed deploy
 
 desc('Deploy the application');
-
 task('deploy', [
     'deploy:info',
     'deploy:prepare',
@@ -65,10 +56,10 @@ task('deploy', [
     'deploy:writable',
     'artisan:storage:link', // |
     'artisan:view:cache',   // |
-    'artisan:config:cache', // | Laravel Specific steps
-    //'artisan:optimize',     // |
+    'artisan:config:cache', // | Laravel specific steps
+    'artisan:queue:restart', // | 
+    'artisan:optimize',     // |
     'artisan:migrate',      // |
-    'artisan:queue:restart',// |
     'deploy:symlink',
     'deploy:unlock',
     'cleanup',
