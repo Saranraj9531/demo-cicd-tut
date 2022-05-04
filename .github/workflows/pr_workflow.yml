@@ -1,11 +1,11 @@
-name: CI-CD
+name: CI-CD #key-value pairs
 
 on:
-  push:
-    branches: master
+  push:   #object
+    branches: master   
 
 jobs:
-  build-js:
+  build-js: #object
     name: Build Js/Css
     runs-on: ubuntu-latest
     steps:
